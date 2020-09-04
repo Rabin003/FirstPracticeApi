@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using BLL.Request;
 using BLL.Services;
 using DLL.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ namespace API.Controllers
             return Ok(await _studentService.GetAAsync(email));
         }
         [HttpPost]
-        public async Task<IActionResult> Insert(Student student)
+        public async Task<IActionResult> Insert(StudentInsertRequestViewModel studentRequest)
         {
-            return Ok(await _studentService.InsertAsync(student));
+            return Ok(await _studentService.InsertAsync(studentRequest));
         }
         
         [HttpPut("{email}")]

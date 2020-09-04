@@ -34,14 +34,28 @@ namespace DLL.DBContext
         {
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(ISoftDeletable).IsAssignableFrom(entity.ClrType)== true)
+                if (typeof(ISoftDeletable).IsAssignableFrom(entity.ClrType) == true)
                 {
                     entity.AddProperty(IsDeleteProperty, typeof(bool));
                     modelBuilder.Entity(entity.ClrType).HasQueryFilter(GetIsDeletedRestriction(entity.ClrType));
 
                 }
-                
+
+                modelBuilder.Entity<CourseStudent>()
+                    .HasKey(bc => new {bc.CourseId, bc.StudentId});
+
+                modelBuilder.Entity<CourseStudent>()
+                    .HasOne(bc => bc.Course)
+                    .WithMany(b => b.CourseStudents)
+                    .HasForeignKey(bc => bc.CourseId);
+
+
+                modelBuilder.Entity<CourseStudent>()
+                    .HasOne(bc => bc.Student)
+                    .WithMany(b => b.CourseStudents)
+                    .HasForeignKey(bc => bc.StudentId);
             }
+
             base.OnModelCreating(modelBuilder);
         }
 

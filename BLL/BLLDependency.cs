@@ -23,7 +23,8 @@ namespace BLL
         {
             
             services.AddTransient<IValidator<DepartmentInsertRequestViewModel>, DepartmentInsertRequestViewModelValidator>();
-            
+            services.AddTransient<IValidator<StudentInsertRequestViewModel>, StudentInsertRequestViewModelValidator>();
+
         }
     }
 }
