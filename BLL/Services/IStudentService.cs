@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.Request;
 using DLL.Model;
@@ -11,11 +12,13 @@ namespace BLL.Services
     {
         
         Task<Student> InsertAsync(StudentInsertRequestViewModel studentRequest);
-        Task<List<Student>> GetAllAsync();
+       IQueryable<Student> GetAllAsync();
         Task<Student> DeleteAsync(string email);
         Task<Student> GetAAsync(string email);
         Task<Student> UpdateAsync(string email, Student student);
         Task<bool> EmailExists(string email);
+        Task<bool> IsIdExists(int id);
+
 
     }
     public class StudentService : IStudentService
@@ -44,14 +47,14 @@ namespace BLL.Services
                 return student;
 
             }
-            throw new AplicationValidationException("department insert has some problem");
+            throw new AplicationValidationException("student insert has some problem");
 
         
         }
 
-        public async Task<List<Student>> GetAllAsync()
+        public   IQueryable<Student> GetAllAsync()
         {
-            return await _unitOfWork.StudentRepository.GetList();
+            return  _unitOfWork.StudentRepository.QueryAll();
         }
 
         public async Task<Student> DeleteAsync(string email)
@@ -100,6 +103,17 @@ namespace BLL.Services
         public async Task<bool> EmailExists(string email)
         {
             var student = await _unitOfWork.StudentRepository.FindSingleAsync(x => x.Email == email);
+            if (student == null)
+            {
+                return true;
+
+            }
+
+            return false;
+        }
+        public async Task<bool> IsIdExists(int id)
+        {
+            var student = await _unitOfWork.StudentRepository.FindSingleAsync(x => x.StudentId == id);
             if (student == null)
             {
                 return true;
