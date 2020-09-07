@@ -2,48 +2,45 @@
 
 namespace DLL.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class ConcurrencyMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "CustomerBalances",
                 columns: table => new
                 {
-                    DepartmentId = table.Column<int>(nullable: false)
+                    CustomerBalanceId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Code = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    Email = table.Column<string>(nullable: true),
+                    Balance = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                    table.PrimaryKey("PK_CustomerBalances", x => x.CustomerBalanceId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
+                name: "TransactionHistories",
                 columns: table => new
                 {
-                    StudentId = table.Column<int>(nullable: false)
+                    TransactionHistoryId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    IsDelete = table.Column<bool>(nullable: false)
+                    Amount = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.StudentId);
+                    table.PrimaryKey("PK_TransactionHistories", x => x.TransactionHistoryId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "CustomerBalances");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "TransactionHistories");
         }
     }
 }

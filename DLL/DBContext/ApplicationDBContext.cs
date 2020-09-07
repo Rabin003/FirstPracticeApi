@@ -6,11 +6,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using DLL.Model;
 using DLL.Model.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DLL.DBContext
 {
-    public class ApplicationDBContext : DbContext
+    public class ApplicationDBContext : IdentityDbContext<
+        AppUser,AppRole,int,
+        IdentityUserClaim<int>,AppUserRole,IdentityUserLogin<int>,
+        IdentityRoleClaim<int>,IdentityUserToken<int>>
+    
+   
     {
         private const string IsDeleteProperty = "IsDelete";
 
@@ -32,6 +39,8 @@ namespace DLL.DBContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CustomerBalance>()
+                .Property(p => p.RowVersion).IsConcurrencyToken();
             foreach (var entity in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDeletable).IsAssignableFrom(entity.ClrType) == true)
@@ -55,7 +64,24 @@ namespace DLL.DBContext
                     .WithMany(b => b.CourseStudents)
                     .HasForeignKey(bc => bc.StudentId);
             }
+            
+            modelBuilder.Entity<AppUser>(b =>
+            {
+                b.HasMany(e => e.AppUserRoles)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
 
+            });
+
+            modelBuilder.Entity<AppRole>(b =>
+            {
+                b.HasMany(e => e.AppUserRoles)
+                    .WithOne(e => e.Role)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+            });
             base.OnModelCreating(modelBuilder);
         }
 
@@ -107,5 +133,12 @@ namespace DLL.DBContext
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<CourseStudent> CourseStudents { get; set; }
+        
+        
+        //for Concurrency Example
+        public DbSet<CustomerBalance> CustomerBalances { get; set; }
+        public DbSet<TransactionHistory> TransactionHistories { get; set; }
+        
+        //end concurrency example
     }
 }
