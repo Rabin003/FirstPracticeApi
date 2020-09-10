@@ -91,10 +91,7 @@ namespace API
             }
 
             app.UseMiddleware<ExecptionMiddleware>();
-            app.UseSwagger(c =>
-            {
-                c.SerializeAsV2 = true;
-            });
+            app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
@@ -106,8 +103,10 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+           
 
             app.UseAuthorization();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
