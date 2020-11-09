@@ -84,6 +84,8 @@ services:
      - MYSQL_ROOT_PASSWORD=admin123
      - MYSQL_USER=rabin
      - MYSQL_PASSWORD=admin123
+     - MYSQL_DATABASE= default_schema
+
      networks:
        - mytestproject
          
@@ -94,6 +96,8 @@ services:
      - 8080:80
      environment:
      - MYSQL_ROOT_PASSWORD=admin123
+     - MYSQL_USER=rabin
+     - MYSQL_PASSWORD=admin123
      links:
        - mymysql:db
      networks:
