@@ -82,6 +82,15 @@ namespace DLL.DBContext
                     .IsRequired();
 
             });
+            modelBuilder.Entity<Course>(c =>
+            {
+                c.Property(d => d.Name).HasMaxLength(100);
+                c.Property(d => d.Code).HasMaxLength(50);
+                c.Property(d => d.CreatedBy).HasMaxLength(100);
+                c.Property(d => d.LastUpdatedBy).HasMaxLength(100);
+                c.Property(d => d.Credit).HasMaxLength(1);
+                c.Property(d => d.ImageUrl).HasMaxLength(100);
+            });
             base.OnModelCreating(modelBuilder);
         }
 
